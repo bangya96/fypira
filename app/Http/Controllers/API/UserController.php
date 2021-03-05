@@ -87,7 +87,7 @@ class UserController extends Controller
     public function getappointment()
     {
         $getappointment = Appointment::where('user_id', Auth::user()->id)->orderBy('id', 'desc')->get();
-        return response()->json($getappointment, $this->successStatus);
+        return response()->json(['data' => $getappointment], $this->successStatus);
     }
 
     public function logout()
