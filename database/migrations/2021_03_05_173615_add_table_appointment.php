@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateSlidersTable extends Migration
+class AddTableAppointment extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,13 @@ class CreateSlidersTable extends Migration
      */
     public function up()
     {
-        Schema::create('sliders', function (Blueprint $table) {
-            $table->bigIncrements('id');
+        Schema::create('appointments', function (Blueprint $table) {
+            $table->bigIncrements('id')->autoIncrement();
+            $table->date('date');
+            $table->time('time');
+            $table->string('service');
+            $table->integer('user_id');
+            $table->string('status');
             $table->timestamps();
         });
     }
@@ -26,6 +31,6 @@ class CreateSlidersTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('sliders');
+        Schema::dropIfExists('appointments');
     }
 }

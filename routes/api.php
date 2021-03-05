@@ -23,4 +23,6 @@ Route::group(['middleware' => 'auth:api'], function(){
     Route::get('logout', 'API\UserController@logout');
     Route::get('details', 'API\UserController@details');
     Route::get('slider', 'API\UserController@slider');
+    Route::get('getappointment', 'API\UserController@getappointment');
+    Route::post('book', 'API\UserController@book');
 });

@@ -7,6 +7,7 @@
  */
 
 namespace App\Http\Controllers\API;
+use App\Appointment;
 use App\Brand;
 use App\Document;
 use App\Product;
@@ -83,11 +84,29 @@ class UserController extends Controller
         return response()->json($slider, $this->successStatus);
     }
 
+    public function getappointment()
+    {
+        $getappointment = Appointment::where('user_id', Auth::user()->id)->orderBy('id', 'desc')->get();
+        return response()->json($getappointment, $this->successStatus);
+    }
+
     public function logout()
     {
         $user = Auth::user();
         $user->api_token = null;
         $user->save();
         return response()->json('Successfully logged out');
+    }
+
+    public function book(Request $request){
+        $book = new Appointment();
+        $book->date = date("Y-m-d", strtotime($request->date));
+        $book->time = date("H:i", strtotime($request->time));
+        $book->service = $request->service;
+        $book->user_id = Auth::user()->id;
+        $book->status = 'pending';
+        $book->save();
+
+        return response()->json($book, $this->successStatus);
     }
 }
