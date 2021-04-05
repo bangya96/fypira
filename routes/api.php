@@ -26,4 +26,7 @@ Route::group(['middleware' => 'auth:api'], function(){
     Route::get('getappointment', 'API\UserController@getappointment');
     Route::post('book', 'API\UserController@book');
     Route::post('changeStatus', 'API\UserController@changeStatus');
+    Route::post('idUser', 'API\UserController@idUser');
+    Route::post('saveUser', 'API\UserController@saveUser');
+    Route::get('allUser', 'API\UserController@allUser');
 });

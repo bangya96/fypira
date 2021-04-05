@@ -130,4 +130,37 @@ class UserController extends Controller
         }
         $data->save();
     }
+
+    public function idUser(Request $request){
+        $users = User::find($request->id);
+
+        return response()->json(['data' => $users], $this->successStatus);
+    }
+
+    public function saveUser(Request $request){
+log::alert($request);
+        $user = User::find($request->id);
+        $user->name = $request->form['name'];
+        $user->email = $request->form['email'];
+        $user->tel_mobile = $request->form['tel_mobile'];
+        $user->address1 = $request->form['address1'];
+        $user->address2 = $request->form['address2'];
+        $user->poscode = $request->form['poscode'];
+        $user->city = $request->form['city'];
+        $user->state = $request->form['state'];
+        $user->gender = $request->form['gender'];
+        $user->roles = $request->form['roles'] ?? $user->roles;
+        if ($request->form['password'] != null){
+            $user->password = bcrypt($request->form['password']);
+        }
+        $user->save();
+
+        return response()->json(['data' => $user], $this->successStatus);
+    }
+
+    public function allUser(){
+        $users = User::all();
+
+        return response()->json(['data' => $users], $this->successStatus);
+    }
 }
