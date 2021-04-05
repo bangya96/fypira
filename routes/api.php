@@ -25,4 +25,5 @@ Route::group(['middleware' => 'auth:api'], function(){
     Route::get('slider', 'API\UserController@slider');
     Route::get('getappointment', 'API\UserController@getappointment');
     Route::post('book', 'API\UserController@book');
+    Route::post('changeStatus', 'API\UserController@changeStatus');
 });

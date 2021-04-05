@@ -15,6 +15,7 @@ use App\Slider;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\User;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 use Validator;
 use Illuminate\Support\Facades\Log;
@@ -86,8 +87,18 @@ class UserController extends Controller
 
     public function getappointment()
     {
-        $getappointment = Appointment::where('user_id', Auth::user()->id)->orderBy('id', 'desc')->get();
-        return response()->json(['data' => $getappointment], $this->successStatus);
+        if (Auth::user()->roles == 'user'){
+            $getappointment = Appointment::leftJoin('users', 'appointments.user_id', 'users.id')
+                ->where('appointments.user_id', Auth::user()->id)
+                ->select('appointments.id as id', 'date', 'time', 'service', 'status', 'name', 'tel_mobile', 'completed')
+                ->orderBy('id', 'desc')->get();
+            return response()->json(['data' => $getappointment], $this->successStatus);
+        } elseif (Auth::user()->roles == 'admin'){
+            $getappointment = Appointment::leftJoin('users', 'appointments.user_id', 'users.id')
+                ->select('appointments.id as id', 'date', 'time', 'service', 'status', 'name', 'tel_mobile', 'completed')
+                ->orderBy('appointments.id', 'desc')->get();
+            return response()->json(['data' => $getappointment], $this->successStatus);
+        }
     }
 
     public function logout()
@@ -108,5 +119,15 @@ class UserController extends Controller
         $book->save();
 
         return response()->json($book, $this->successStatus);
+    }
+
+    public function changeStatus(Request $request){
+        $data = Appointment::find($request->id);
+        if ($request->status == 'completed'){
+            $data->completed = $request->status;
+        } else {
+            $data->status = $request->status;
+        }
+        $data->save();
     }
 }
